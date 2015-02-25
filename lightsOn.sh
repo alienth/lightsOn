@@ -53,17 +53,13 @@ done < <(xvinfo | sed -n 's/^screen #\([0-9]\+\)$/\1/p')
 
 
 # Detect screensaver been used (xscreensaver, kscreensaver or none)
-screensaver=`pgrep -l xscreensaver | grep -wc xscreensaver`
-if [ $screensaver -ge 1 ]; then
-    screensaver=xscreensaver
+if pgrep -l xscreensaver >/dev/null; then
+    screensaver="xscreensaver"
+elif pgrep -l kscreensaver >/dev/null; then
+    screensaver="kscreensaver"
 else
-    screensaver=`pgrep -l kscreensaver | grep -wc kscreensaver`
-    if [ $screensaver -ge 1 ]; then
-        screensaver=kscreensaver
-    else
-        screensaver=None
-        echo "No screensaver detected"
-    fi
+    screensaver="None"
+    echo "No screensaver detected"
 fi
 
 checkDelayProgs()
